@@ -27,7 +27,7 @@ public class InterfazUsuario {
 
     private void construirInterfaz() {
         // 1. Configuración de la Ventana Principal
-        frame = new JFrame("Catálogo de Productos - Sony");
+        frame = new JFrame("Catálogo de Productos - Mi Tienda");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setSize(850, 650); // Un poco más grande para el listado
         frame.setLayout(new BorderLayout(10, 10));
