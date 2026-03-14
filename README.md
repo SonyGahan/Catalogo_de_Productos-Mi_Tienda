@@ -1,13 +1,13 @@
 # Sistema de Consulta de Productos 🛒
 
-Un sistema ligero y eficiente desarrollado en **Java 17** para la gestión, filtrado y consulta de un catálogo de productos. El sistema lee datos estructurados desde archivos `.csv`, permitiendo al usuario realizar búsquedas jerárquicas (de lo general a lo específico) e inyectando dinámicamente las composiciones de los productos utilizando **Java Streams**.
+Un sistema robusto y eficiente desarrollado en **Java 17** con interfaz gráfica **(Swing)** para la gestión, filtrado y generación de cotizaciones de un catálogo de productos. El sistema migra datos estructurados desde archivos .csv hacia una base de datos relacional embebida **(SQLite)**, permitiendo al usuario realizar búsquedas jerárquicas (de lo general a lo específico) o búsquedas libres por texto. Además, inyecta dinámicamente las composiciones de los productos mediante consultas **SQL (JOIN)** y permite exportar los listados resultantes directamente a WhatsApp.
 
 ## 🚀 Características Principales
 
-* **Persistencia y Seguridad (Backend):** Posee una base de datos local (SQLite) que no pierde información al apagar la PC. Implementa transacciones para que, si un mes el archivo CSV viene roto, la base de datos aborte la carga y proteja el catálogo viejo. Además, utiliza empaquetado (Batching) para que cargue miles de filas en milisegundos.
-* **Lógica de Negocio Completa:** El sistema respeta la jerarquía de tus datos (Familia -> Grupo -> Productos específicos). Permite búsquedas flexibles (por menú o por palabra libre) y procesa la información matemáticamente sumando los totales para armar un presupuesto.
-* **Experiencia de Usuario (UX) Profesional:** La interfaz gráfica (Swing) tiene un diseño institucional limpio. Cuenta con placeholders ("--- Seleccione ---"), se resetea automáticamente para no confundir al usuario, y tiene ventanas emergentes de confirmación y error.
-* **Integración Comercial:** Genera un listado del detalle de la operación seleccionada. Exporta automáticamente dicho listado hacia la API de WhatsApp.
+* **⚙️ Arquitectura Backend y Persistencia Segura:** Integración con base de datos embebida (SQLite) que garantiza la retención segura de la información. Implementa Transacciones SQL (Commit/Rollback) para proteger el catálogo existente ante errores de lectura o archivos CSV corruptos, y utiliza procesamiento por lotes (Batching) para lograr la inserción de miles de registros en milisegundos.
+* **🧠 Lógica de Negocio Avanzada:** El sistema gestiona y respeta la jerarquía relacional de los datos (Familia -> Grupo -> Productos específicos). Incorpora un motor de búsqueda dual (filtros en cascada y búsqueda libre por texto) y procesa la información en tiempo real, calculando sumatorias exactas para la generación de presupuestos.
+* **🎨 Experiencia de Usuario (UX) Profesional:** Interfaz de escritorio desarrollada con Java Swing bajo un diseño institucional, limpio e intuitivo. Destaca por su sincronización inteligente de estados (reseteo automático de campos para evitar datos contradictorios), uso de placeholders y retroalimentación visual constante mediante cuadros de diálogo interactivos.
+* **📱 Integración Comercial:** Transformación de las consultas en tickets detallados listos para el cliente. Cuenta con conectividad directa a la API de WhatsApp (wa.me), lo que permite exportar y enviar la cotización completa de manera automatizada con un solo clic.
 
 ## 🛠️ Tecnologías Utilizadas
 
@@ -15,6 +15,17 @@ Un sistema ligero y eficiente desarrollado en **Java 17** para la gestión, filt
 * **Paradigma:** Programación Orientada a Objetos (POO)
 * **Diseño de Arquitectura:** UML (Casos de Uso, Clases, Actividades, Secuencia) modelado en Draw.io.
 
+---
+
+## 📷 Capturas de Pantalla
+
+A continuación te mostramos cómo se ve la aplicación:
+
+![Presentación del Sistema](/assets/Final.JPG)
+
+---
+
+![Vista Principal](/assets/imagen1.JPG)
 ---
 
 ## 📐 Arquitectura y Diseño del Sistema
@@ -43,12 +54,55 @@ Representa la línea de tiempo de los mensajes entre los objetos cuando se reali
 
 ---
 
-## ⚙️ Instalación y Ejecución
+## 🔧 Instalación y Uso
 
-1. Clonar el repositorio:
+Si deseas correr este proyecto localmente:
+
+1.  Clona el repositorio:
+    ```bash
+    git clone [https://github.com/SonyGahan/Catalogo_de_Productos-Mi_Tienda.git](https://github.com/SonyGahan/Catalogo_de_Productos-Mi_Tienda.git)
+    ```
+2.  Ejecuta el programa para comenzar a trabajar con la tienda.
+
+---
+
+## 💡 Contribuciones
+
+Las contribuciones son bienvenidas. Si deseas mejorar el proyecto o agregar nuevas funcionalidades, sigue estos pasos:
+
+1. **Haz un Fork** del repositorio.
+2. Crea una nueva rama con una descripción clara:
    ```bash
-   git clone [https://github.com/sealar24/proyectoAlejandra.git](https://github.com/sealar24/proyectoAlejandra.git)
+   git checkout -b nueva-funcionalidad
+   ```
+3. Realiza tus cambios y haz un commit:
+   ```bash
+   git commit -m "Agrega nueva funcionalidad X"
+   ```
+4. Sube los cambios a tu repositorio remoto:
+   ```bash
+   git push origin nueva-funcionalidad
+   ```
+5. Crea un **Pull Request** en este repositorio.
 
-## 👨‍💻 Autores
-* SonyGahan - Desarrollo y Diseño de Arquitectura
-* sealar24 - Desarrollo y Diseño de Arquitectura
+---
+
+## 📬 Contacto
+
+Si tienes alguna duda o sugerencia, puedes contactarme a través de GitHub:
+
+[GitHub: SonyGahan](https://github.com/SonyGahan)
+
+---
+
+## 📝 Licencia
+
+Este proyecto está bajo la **Licencia MIT**. Consulta el archivo [LICENSE](LICENSE) para más detalles.
+
+---
+
+## 💻 Agradecimientos
+
+🚀 Gracias por visitar mi repositorio y por tu interés en este proyecto. ¡Espero que te sea útil! 😄
+
+## ⌨️ Construido con ❤️ por Sony Gahan 😊
