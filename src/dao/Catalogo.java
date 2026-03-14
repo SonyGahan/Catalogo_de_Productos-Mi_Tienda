@@ -1,3 +1,7 @@
+package dao;
+
+import modelo.Producto;
+
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
@@ -81,7 +85,7 @@ public class Catalogo {
 
             try (ResultSet rs = pstmt.executeQuery()) {
                 while (rs.next()) {
-                    // Convierte cada fila de la base de datos en un objeto Producto
+                    // Convierte cada fila de la base de datos en un objeto modelo.Producto
                     Producto p = new Producto(
                             rs.getInt("codigo"),
                             rs.getString("descripcion_general"),
@@ -127,7 +131,7 @@ public class Catalogo {
             try (ResultSet rs = pstmt.executeQuery()) {
                 while (rs.next()) {
                     // 1. Se arma el producto base
-                    // Convierte cada fila de la base de datos en un objeto Producto
+                    // Convierte cada fila de la base de datos en un objeto modelo.Producto
                     Producto p = new Producto(
                             rs.getInt("codigo"),
                             rs.getString("descripcion_general"),

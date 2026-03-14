@@ -1,3 +1,9 @@
+package vista;
+
+import dao.Catalogo;
+import dao.ConexionDB;
+import modelo.Producto;
+
 import javax.swing.*;
 import java.awt.*;
 import java.net.URI;
@@ -40,7 +46,7 @@ public class InterfazUsuario {
         // -- Subpanel Buscador --
         JPanel panelBuscador = new JPanel(new FlowLayout(FlowLayout.LEFT, 15, 10));
         panelBuscador.setBackground(FONDO_BLANCO);
-        panelBuscador.add(new JLabel("🔍 Buscar Producto:"));
+        panelBuscador.add(new JLabel("🔍 Buscar modelo.Producto:"));
         txtBuscar = new JTextField(25);
         txtBuscar.setFont(new Font("Segoe UI", Font.PLAIN, 14));
         JButton btnBuscar = new JButton("Buscar");
@@ -213,7 +219,7 @@ public class InterfazUsuario {
             }
         });
 
-        // EVENTO 6: Botón Actualizar Catalogo
+        // EVENTO 6: Botón Actualizar dao.Catalogo
         btnActualizar.addActionListener(e -> {
             UIManager.put("OptionPane.background", FONDO_BLANCO);
             UIManager.put("Panel.background", FONDO_BLANCO);
@@ -224,7 +230,7 @@ public class InterfazUsuario {
 
             if (confirmacion == JOptionPane.YES_OPTION) {
                 textDetalles.setText("\n   Actualizando base de datos...\n   Por favor espere.");
-                boolean exito = clases.ConexionDB.cargarDatosDesdeCSV("src/datos/tabla_productos.csv", "src/datos/tabla_componentes.csv");
+                boolean exito = ConexionDB.cargarDatosDesdeCSV("src/datos/tabla_productos.csv", "src/datos/tabla_componentes.csv");
                 if(exito){
                     cargarCategorias();
                     textDetalles.setText("\n   ¡Catálogo actualizado con éxito desde los archivos CSV!");

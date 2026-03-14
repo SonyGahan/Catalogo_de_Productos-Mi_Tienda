@@ -1,4 +1,4 @@
-package clases;
+package dao;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -14,7 +14,7 @@ public class ConexionDB {
     private static final String URL = "jdbc:sqlite:src/datos/catalogo.db";
 
     public static void crearBaseDeDatos() {
-        // 1. Tabla de Productos - reflejando los atributos de la clase Producto
+        // 1. Tabla de Productos - reflejando los atributos de la clase modelo.Producto
         String tablaProductos = "CREATE TABLE IF NOT EXISTS productos ("
                 + " codigo INTEGER PRIMARY KEY,"
                 + " descripcion_general TEXT NOT NULL,"

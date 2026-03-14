@@ -38,7 +38,7 @@ Define las interacciones principales del usuario con el sistema, incluyendo la c
 > ![Diagrama de Casos de Uso](assets/diagrama_casos_de_usos.png)
 
 ### 2. Diagrama de Clases
-Muestra la estructura orientada a objetos, destacando la separación de responsabilidades entre el `Producto`, el `Catalogo` (cerebro del filtrado) y la `InterfazUsuario`.
+Muestra la estructura orientada a objetos, destacando la separación de responsabilidades entre el `modelo.Producto`, el `dao.Catalogo` (cerebro del filtrado) y la `vista.InterfazUsuario`.
 
 > ![Diagrama de Clases](assets/diagrama_clases.png)
 
