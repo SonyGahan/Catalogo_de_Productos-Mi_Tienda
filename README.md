@@ -4,10 +4,10 @@ Un sistema ligero y eficiente desarrollado en **Java 17** para la gestión, filt
 
 ## 🚀 Características Principales
 
-* **Carga Dinámica de Datos:** Lectura de archivos CSV separando la lógica de productos y sus observaciones/composiciones.
-* **Filtrado en Cascada:** Permite agrupar productos por su "Descripción General" y luego refinar la búsqueda por su "Descripción Específica".
-* **Búsqueda Optimizada:** Uso de `HashMap` en memoria para relacionar instantáneamente el código de un producto con su composición.
-* **Actualización en Caliente:** Capacidad de recargar el catálogo de productos sin necesidad de reiniciar la aplicación.
+* **Persistencia y Seguridad (Backend):** Posee una base de datos local (SQLite) que no pierde información al apagar la PC. Implementa transacciones para que, si un mes el archivo CSV viene roto, la base de datos aborte la carga y proteja el catálogo viejo. Además, utiliza empaquetado (Batching) para que cargue miles de filas en milisegundos.
+* **Lógica de Negocio Completa:** El sistema respeta la jerarquía de tus datos (Familia -> Grupo -> Productos específicos). Permite búsquedas flexibles (por menú o por palabra libre) y procesa la información matemáticamente sumando los totales para armar un presupuesto.
+* **Experiencia de Usuario (UX) Profesional:** La interfaz gráfica (Swing) tiene un diseño institucional limpio. Cuenta con placeholders ("--- Seleccione ---"), se resetea automáticamente para no confundir al usuario, y tiene ventanas emergentes de confirmación y error.
+* **Integración Comercial:** Genera un listado del detalle de la operación seleccionada. Exporta automáticamente dicho listado hacia la API de WhatsApp.
 
 ## 🛠️ Tecnologías Utilizadas
 

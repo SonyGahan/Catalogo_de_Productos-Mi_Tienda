@@ -27,9 +27,9 @@ public class InterfazUsuario {
 
     private void construirInterfaz() {
         // 1. Configuración de la Ventana Principal
-        frame = new JFrame("Catálogo de Productos - Mi Tienda");
+        frame = new JFrame("Catálogo de Productos - Mi tienda");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frame.setSize(850, 650); // Un poco más grande para el listado
+        frame.setSize(850, 650);
         frame.setLayout(new BorderLayout(10, 10));
         frame.getContentPane().setBackground(FONDO_BLANCO);
 
@@ -56,7 +56,7 @@ public class InterfazUsuario {
         // Tipografía para las etiquetas - Labels
         Font fuenteLabels = new Font("Segoe UI", Font.BOLD, 14);
 
-        JLabel lblCategoria = new JLabel("1. Familia (General):");
+        JLabel lblCategoria = new JLabel("1. Familia:");
         lblCategoria.setFont(fuenteLabels);
         panelFiltros.add(lblCategoria);
 
@@ -65,7 +65,7 @@ public class InterfazUsuario {
         comboGeneral.setBackground(Color.WHITE);
         panelFiltros.add(comboGeneral);
 
-        JLabel lblProducto = new JLabel("2. Grupo (Elección):");
+        JLabel lblProducto = new JLabel("2. Grupo:");
         lblProducto.setFont(fuenteLabels);
         panelFiltros.add(lblProducto);
 
@@ -119,7 +119,7 @@ public class InterfazUsuario {
         JPanel panelBoton = new JPanel(new FlowLayout(FlowLayout.CENTER, 15, 15));
         panelBoton.setBackground(FONDO_BLANCO);
 
-        JButton btnNuevaConsulta = new JButton("Limpiar Consulta");
+        JButton btnNuevaConsulta = new JButton("Nueva Consulta");
         btnVerLista = new JButton("Generar Listado");
         JButton btnWhatsApp = new JButton("Enviar por WhatsApp");
         JButton btnSalir = new JButton("Salir");
@@ -148,34 +148,55 @@ public class InterfazUsuario {
         // EVENTO 1: Al cambiar Familia - GENERAL
         comboGeneral.addActionListener(e -> {
             String categoria = (String) comboGeneral.getSelectedItem();
-            if (categoria != null) {
+            // Verificamos que no sea el texto por defecto
+            if (categoria != null && !categoria.startsWith("---")) {
                 cargarElecciones(categoria);
                 comboEleccion.setEnabled(true);
-                btnVerLista.setEnabled(true);
+                btnVerLista.setEnabled(false); // Aún no se habilita hasta elegir grupo
                 textDetalles.setText("");
+            } else {
+                comboEleccion.removeAllItems();
+                comboEleccion.setEnabled(false);
+                btnVerLista.setEnabled(false);
             }
         });
 
-        // EVENTO 2: Botón Generar Listado
+        // EVENTO 2: Al cambiar Grupo - ELECCION
+        comboEleccion.addActionListener(e -> {
+            String eleccion = (String) comboEleccion.getSelectedItem();
+            // Solo si elige un grupo real habilitamos el botón de ver lista
+            if (eleccion != null && !eleccion.startsWith("---")) {
+                btnVerLista.setEnabled(true);
+            } else {
+                btnVerLista.setEnabled(false);
+            }
+        });
+
+        // EVENTO 3: Botón Generar Listado
         btnVerLista.addActionListener(e -> {
             String general = (String) comboGeneral.getSelectedItem();
             String eleccion = (String) comboEleccion.getSelectedItem();
-            if (general != null && eleccion != null) {
+            if (general != null && eleccion != null && !general.startsWith("---") && !eleccion.startsWith("---")) {
                 List<Producto> productos = catalogo.obtenerListaProductosPorEleccion(general, eleccion);
                 mostrarListado(general, eleccion, productos);
             }
         });
 
-        // EVENTO 3: Botón Buscar por palabra
+        // EVENTO 4: Botón Buscar por palabra
         btnBuscar.addActionListener(e -> {
             String palabra = txtBuscar.getText().trim();
             if(!palabra.isEmpty()){
+                // Se recetea el menú superior para que no haya datos contradictorios
+                if(comboGeneral.getItemCount() > 0) {
+                    comboGeneral.setSelectedIndex(0);
+                }
+
                 List<Producto> productos = catalogo.buscarProductosPorPalabra(palabra);
-                mostrarListado("BÚSQUEDA", "Coincidencias para: '" + palabra + "'", productos);
+                mostrarListado("BÚSQUEDA LIBRE", "Coincidencias para: '" + palabra + "'", productos);
             }
         });
 
-        // EVENTO 4: Botón Enviar por WhatsApp
+        // EVENTO 5: Botón Enviar por WhatsApp
         btnWhatsApp.addActionListener(e -> {
             String texto = textDetalles.getText();
             if (texto.isEmpty() || texto.contains("Actualizando base de datos")) {
@@ -183,16 +204,16 @@ public class InterfazUsuario {
                 return;
             }
             try {
-                // Codificamos el texto para que los espacios y saltos de línea funcionen en la URL
+                // Se codifica el texto para que los espacios y saltos de línea funcionen en la URL
                 String encodedText = URLEncoder.encode(texto, "UTF-8");
                 String url = "https://wa.me/?text=" + encodedText;
-                Desktop.getDesktop().browse(new URI(url)); // Abre el navegador predeterminado
+                Desktop.getDesktop().browse(new URI(url));
             } catch (Exception ex) {
                 JOptionPane.showMessageDialog(frame, "Error al abrir WhatsApp.", "Error", JOptionPane.ERROR_MESSAGE);
             }
         });
 
-        // EVENTO 5: Botón Actualizar Catalogo
+        // EVENTO 6: Botón Actualizar Catalogo
         btnActualizar.addActionListener(e -> {
             UIManager.put("OptionPane.background", FONDO_BLANCO);
             UIManager.put("Panel.background", FONDO_BLANCO);
@@ -215,16 +236,12 @@ public class InterfazUsuario {
             }
         });
 
-        // EVENTO 6: Al presionar "Nueva Consulta"
+        // EVENTO 7: Al presionar "Nueva Consulta"
         btnNuevaConsulta.addActionListener(e -> {
             txtBuscar.setText("");
             textDetalles.setText("");
-            comboEleccion.removeAllItems();
-            comboEleccion.setEnabled(false);
-            btnVerLista.setEnabled(false);
-
             if(comboGeneral.getItemCount() > 0) {
-                comboGeneral.setSelectedIndex(0);
+                comboGeneral.setSelectedIndex(0); // Esto apaga el segundo combo automáticamente
             }
         });
 
@@ -257,6 +274,8 @@ public class InterfazUsuario {
     private void cargarCategorias() {
         // Impide que salte el evento "addActionListener" mientras se carga la lista
         comboGeneral.removeAllItems();
+        // Se utiliza el Placeholder como primera opción
+        comboGeneral.addItem("--- Seleccione una Familia ---");
         List<String> categorias = catalogo.obtenerDescripcionesGenerales();
         for (String cat : categorias) {
             comboGeneral.addItem(cat);
@@ -265,6 +284,8 @@ public class InterfazUsuario {
 
     private void cargarElecciones(String categoria) {
         comboEleccion.removeAllItems();
+        // Utiliza el Placeholder como primera opción
+        comboEleccion.addItem("--- Seleccione un Grupo ---");
         List<String> elecciones = catalogo.obtenerEleccionesPorGeneral(categoria);
         for (String eleccion : elecciones) {
             comboEleccion.addItem(eleccion);
@@ -306,7 +327,7 @@ public class InterfazUsuario {
         sb.append("=================================================================\n");
 
         textDetalles.setText(sb.toString());
-        // Movemos el scroll hacia arriba para que el usuario lea desde el principio
+        // Mueve el scroll hacia arriba para que el usuario lea desde el principio
         textDetalles.setCaretPosition(0);
     }
 
