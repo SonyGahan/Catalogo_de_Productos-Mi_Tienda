@@ -1,13 +1,14 @@
-# Sistema de Consulta de Productos 🛒
+# Sistema de Consulta de Productos y Punto de Venta (POS) 🛒
 
-Un sistema robusto y eficiente desarrollado en **Java 17** con interfaz gráfica **(Swing)** para la gestión, filtrado y generación de cotizaciones de un catálogo de productos. El sistema migra datos estructurados desde archivos .csv hacia una base de datos relacional embebida **(SQLite)**, permitiendo al usuario realizar búsquedas jerárquicas (de lo general a lo específico) o búsquedas libres por texto. Además, inyecta dinámicamente las composiciones de los productos mediante consultas **SQL (JOIN)** y permite exportar los listados resultantes directamente a WhatsApp.
+Un sistema robusto y eficiente desarrollado en **Java 17** con interfaz gráfica **(Swing)** para la gestión, filtrado y generación de cotizaciones a través de un catálogo de productos. El sistema migra datos estructurados desde archivos .csv hacia una base de datos relacional embebida **(SQLite)**. Destaca por su panel de cotización interactivo (carrito), que permite al usuario realizar búsquedas jerárquicas o libres, calcular totales en tiempo real e inyectar dinámicamente las composiciones de los productos mediante consultas **SQL (JOIN)**, para finalmente exportar los tickets directamente a WhatsApp.
 
 ## 🚀 Características Principales
 
 * **⚙️ Arquitectura Backend y Persistencia Segura:** Integración con base de datos embebida (SQLite) que garantiza la retención segura de la información. Implementa Transacciones SQL (Commit/Rollback) para proteger el catálogo existente ante errores de lectura o archivos CSV corruptos, y utiliza procesamiento por lotes (Batching) para lograr la inserción de miles de registros en milisegundos.
-* **🧠 Lógica de Negocio Avanzada:** El sistema gestiona y respeta la jerarquía relacional de los datos (Familia -> Grupo -> Productos específicos). Incorpora un motor de búsqueda dual (filtros en cascada y búsqueda libre por texto) y procesa la información en tiempo real, calculando sumatorias exactas para la generación de presupuestos.
-* **🎨 Experiencia de Usuario (UX) Profesional:** Interfaz de escritorio desarrollada con Java Swing bajo un diseño institucional, limpio e intuitivo. Destaca por su sincronización inteligente de estados (reseteo automático de campos para evitar datos contradictorios), uso de placeholders y retroalimentación visual constante mediante cuadros de diálogo interactivos.
-* **📱 Integración Comercial:** Transformación de las consultas en tickets detallados listos para el cliente. Cuenta con conectividad directa a la API de WhatsApp (wa.me), lo que permite exportar y enviar la cotización completa de manera automatizada con un solo clic.
+* **🛡️ Flujo de Trabajo y Seguridad:** Incorpora un Menú Principal ("Panel de Control") que separa lógicamente el rol de Administración (actualización de base de datos) del rol de Ventas (armado de pedidos), previniendo modificaciones accidentales durante la atención al cliente.
+* **🧠 Lógica de Negocio Avanzada:** El sistema gestiona y respeta la jerarquía relacional de los datos (Familia -> Grupo -> Productos específicos). Incorpora un motor de búsqueda dual (filtros en cascada y búsqueda libre por texto) perfectamente sincronizado.
+* **🎨 Experiencia de Usuario (UX) Profesional e Interactiva:** La vista de ventas evoluciona hacia un sistema POS dividiendo la pantalla mediante un `JSplitPane`. Implementa tablas interactivas (`JTable`) que permiten al usuario agregar productos al carrito o quitarlos con un simple **doble clic**, recalculando el presupuesto matemático en tiempo real.
+* **📱 Integración Comercial:** Transformación del carrito de compras en tickets detallados listos para el cliente. Cuenta con conectividad directa a la API de WhatsApp (wa.me), lo que permite exportar y enviar la cotización completa de manera automatizada con un solo clic.
 
 ## 🛠️ Tecnologías Utilizadas
 
@@ -74,14 +75,6 @@ Las contribuciones son bienvenidas. Si deseas mejorar el proyecto o agregar nuev
 2. Crea una nueva rama con una descripción clara:
    ```bash
    git checkout -b nueva-funcionalidad
-   ```
-3. Realiza tus cambios y haz un commit:
-   ```bash
-   git commit -m "Agrega nueva funcionalidad X"
-   ```
-4. Sube los cambios a tu repositorio remoto:
-   ```bash
-   git push origin nueva-funcionalidad
    ```
 5. Crea un **Pull Request** en este repositorio.
 
