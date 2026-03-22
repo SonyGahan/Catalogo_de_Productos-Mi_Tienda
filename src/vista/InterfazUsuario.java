@@ -320,14 +320,14 @@ public class InterfazUsuario {
     // ==========================================
     // MÉTODOS AUXILIARES DE DISEÑO
     // ==========================================
+    // Método auxiliar de diseño
     private void estilizarBoton(JButton boton, Color colorFondo, Color colorTexto) {
         boton.setBackground(colorFondo);
         boton.setForeground(colorTexto);
         boton.setFont(new Font("Segoe UI Emoji", Font.BOLD, 14));
-        boton.setFocusPainted(false);
-        boton.setBorder(BorderFactory.createEmptyBorder(8, 15, 8, 15));
         boton.setCursor(new Cursor(Cursor.HAND_CURSOR));
-        boton.setOpaque(true);
+        // Esto respeta los bordes redondeados y efectos modernos de FlatLaf.
+        boton.setMargin(new java.awt.Insets(10, 20, 10, 20));
     }
 
     public void mostrar() {

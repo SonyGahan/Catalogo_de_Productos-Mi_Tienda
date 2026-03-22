@@ -25,8 +25,16 @@ A continuación te mostramos cómo se ve la aplicación:
 ![Presentación del Sistema](/assets/Final.JPG)
 
 ---
+![Presentación del Sistema](/assets/FinalOscuro.JPG)
+
+---
 
 ![Vista Principal](/assets/imagen1.JPG)
+
+---
+
+![Vista Principal](/assets/imagen1oscuro.JPG)
+
 ---
 
 ## 📐 Arquitectura y Diseño del Sistema

@@ -57,7 +57,7 @@ public class MenuPrincipal {
 
         // 4. Panel Inferior - Botón de Tema a seleccionar
         JPanel panelSur = new JPanel(new FlowLayout(FlowLayout.CENTER));
-        panelSur.setBorder(BorderFactory.createEmptyBorder(0, 0, 15, 0));
+        panelSur.setBorder(BorderFactory.createEmptyBorder(20, 0, 30, 0));
         JButton btnTema = new JButton("🌙 Cambiar a Modo Oscuro");
         estilizarBoton(btnTema, GRIS_OSCURO, Color.WHITE);
         panelSur.add(btnTema);
@@ -125,14 +125,14 @@ public class MenuPrincipal {
         frame.setLocationRelativeTo(null);
     }
 
-    // Método de diseño para los botones del Menú
+    // Método auxiliar de diseño
     private void estilizarBoton(JButton boton, Color colorFondo, Color colorTexto) {
         boton.setBackground(colorFondo);
         boton.setForeground(colorTexto);
         boton.setFont(new Font("Segoe UI Emoji", Font.BOLD, 14));
-        boton.setFocusPainted(false);
         boton.setCursor(new Cursor(Cursor.HAND_CURSOR));
-        boton.setOpaque(true);
+        // Esto respeta los bordes redondeados y efectos modernos de FlatLaf.
+        boton.setMargin(new java.awt.Insets(10, 20, 10, 20));
     }
 
     public void mostrar() {
