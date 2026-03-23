@@ -16,7 +16,6 @@ public class MenuPrincipal {
     private final Color AZUL_CORPORATIVO = new Color(0, 86, 179);
     private final Color VERDE_WPP = new Color(37, 211, 102);
     private final Color ROJO_SUAVE = new Color(220, 53, 69);
-    private final Color GRIS_OSCURO = new Color(50, 50, 50);
 
     public MenuPrincipal(Catalogo catalogo) {
         this.catalogo = catalogo;
@@ -27,7 +26,6 @@ public class MenuPrincipal {
         // 1. Configuración de la Ventana
         frame = new JFrame("Sistema de Gestión - Menú Principal");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        // Amplia un poquito el ancho y alto para que todo respire perfecto
         frame.setSize(420, 420);
         frame.setLayout(new BorderLayout());
 
@@ -55,11 +53,24 @@ public class MenuPrincipal {
 
         frame.add(panelBotones, BorderLayout.CENTER);
 
-        // 4. Panel Inferior - Botón de Tema a seleccionar
-        JPanel panelSur = new JPanel(new FlowLayout(FlowLayout.CENTER));
-        panelSur.setBorder(BorderFactory.createEmptyBorder(20, 0, 30, 0));
-        JButton btnTema = new JButton("🌙 Cambiar a Modo Oscuro");
-        estilizarBoton(btnTema, GRIS_OSCURO, Color.WHITE);
+        // ==========================================
+        // 4. Panel Inferior - Botón Deslizante
+        // ==========================================
+        // Usa FlowLayout.RIGHT para enviarlo a la esquina derecha sutilmente
+        JPanel panelSur = new JPanel(new FlowLayout(FlowLayout.RIGHT));
+        panelSur.setBorder(BorderFactory.createEmptyBorder(0, 0, 10, 20));
+
+        // JToggleButton maneja dos estados: Prendido/Apagado
+        JToggleButton btnTema = new JToggleButton();
+        btnTema.setCursor(new Cursor(Cursor.HAND_CURSOR));
+        btnTema.setFocusPainted(false);
+        btnTema.putClientProperty("JButton.buttonType", "roundRect");
+
+        // Evalúa en qué modo arranca el programa para poner el texto correcto
+        boolean esOscuro = UIManager.getLookAndFeel() instanceof FlatDarkLaf;
+        btnTema.setSelected(esOscuro);
+        btnTema.setText(esOscuro ? "☀️ Modo Claro" : "🌙 Modo Oscuro");
+
         panelSur.add(btnTema);
         frame.add(panelSur, BorderLayout.SOUTH);
 
@@ -70,21 +81,14 @@ public class MenuPrincipal {
         // EVENTO GRAFICO: Cambiar Tema: Claro/Oscuro
         btnTema.addActionListener(e -> {
             try {
-                // Pregunta si el tema actual es oscuro
-                boolean esOscuro = UIManager.getLookAndFeel() instanceof FlatDarkLaf;
-
-                if (esOscuro) {
-                    UIManager.setLookAndFeel(new FlatLightLaf());
-                    btnTema.setText("🌙 Cambiar a Modo Oscuro");
-                    btnTema.setBackground(GRIS_OSCURO);
-                    btnTema.setForeground(Color.WHITE);
-                } else {
+                // Si el botón está "hundido/seleccionado", cambia a modo claro
+                if (btnTema.isSelected()) {
                     UIManager.setLookAndFeel(new FlatDarkLaf());
-                    btnTema.setText("☀️ Cambiar a Modo Claro");
-                    btnTema.setBackground(new Color(240, 240, 240));
-                    btnTema.setForeground(Color.BLACK);
+                    btnTema.setText("☀️ Modo Claro");
+                } else {
+                    UIManager.setLookAndFeel(new FlatLightLaf());
+                    btnTema.setText("🌙 Modo Oscuro");
                 }
-                // La ventana se redibuje con el nuevo tema
                 SwingUtilities.updateComponentTreeUI(frame);
             } catch (Exception ex) {
                 ex.printStackTrace();
@@ -121,17 +125,15 @@ public class MenuPrincipal {
             System.exit(0);
         });
 
-        // Centra la ventana en la pantalla
         frame.setLocationRelativeTo(null);
     }
 
-    // Método auxiliar de diseño
+    // Método de diseño para los botones PRINCIPALES del Menú
     private void estilizarBoton(JButton boton, Color colorFondo, Color colorTexto) {
         boton.setBackground(colorFondo);
         boton.setForeground(colorTexto);
         boton.setFont(new Font("Segoe UI Emoji", Font.BOLD, 14));
         boton.setCursor(new Cursor(Cursor.HAND_CURSOR));
-        // Esto respeta los bordes redondeados y efectos modernos de FlatLaf.
         boton.setMargin(new java.awt.Insets(10, 20, 10, 20));
     }
 
