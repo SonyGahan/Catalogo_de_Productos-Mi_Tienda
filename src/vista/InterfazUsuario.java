@@ -19,7 +19,7 @@ public class InterfazUsuario {
     private JComboBox<String> comboEleccion;
     private Catalogo catalogo;
 
-    // Nuevos componentes para las Tablas Interactivas
+    // Tablas Interactivas
     private JTable tablaBuscador;
     private DefaultTableModel modeloBuscador;
     private JTable tablaCarrito;
@@ -32,6 +32,7 @@ public class InterfazUsuario {
     private final Color GRIS_SUAVE = new Color(200, 200, 200);
     private final Color ROJO_SUAVE = new Color(220, 53, 69);
     private final Color VERDE_WPP = new Color(37, 211, 102);
+    private final Color GRIS_OSCURO = new Color(50, 50, 50);
 
     public InterfazUsuario(Catalogo catalogo) {
         this.catalogo = catalogo;
@@ -40,17 +41,16 @@ public class InterfazUsuario {
 
     private void construirInterfaz() {
         frame = new JFrame("Catálogo de Productos - Mi tienda");
-        // DISPOSE_ON_CLOSE asegura que se pueda volver al menú sin matar la app entera
         frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-        frame.setSize(1000, 700);
+        // Maneja el ancho de la ventana principal que contiene las 3 columnas principales
+        frame.setSize(1350, 720);
         frame.setLayout(new BorderLayout(10, 10));
 
         // ==========================================
-        // 2. PANEL SUPERIOR - Buscador y Filtros
+        // 1. PANEL SUPERIOR - Buscador y Filtros
         // ==========================================
         JPanel panelNorte = new JPanel(new BorderLayout());
 
-        // Subpanel Buscador y Botones de Búsqueda
         JPanel panelBuscador = new JPanel(new FlowLayout(FlowLayout.LEFT, 15, 10));
         panelBuscador.add(new JLabel("🔍 Buscar Producto:"));
         txtBuscar = new JTextField(20);
@@ -96,9 +96,9 @@ public class InterfazUsuario {
         panelNorte.add(panelFiltros, BorderLayout.CENTER);
         frame.add(panelNorte, BorderLayout.NORTH);
 
-        // ==========================================
-        // 3. PANEL CENTRAL - Tablas Divididas
-        // ==========================================
+        // ===============================================
+        // 2. PANEL CENTRAL - 3 Columnas Listas y Flechas
+        // ===============================================
 
         // Tabla Izquierda: Resultados de Búsqueda
         String[] columnasBuscador = {"Código", "Descripción", "Precio", "Composición"};
@@ -108,10 +108,10 @@ public class InterfazUsuario {
         };
         tablaBuscador = new JTable(modeloBuscador);
         tablaBuscador.setRowHeight(25);
-        // Paso 1: Se desactiva el auto-redimensionado.
-        // Esto permite que las columnas sean más anchas que la ventana y activará la barra horizontal.
-        tablaBuscador.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
+        // Habilita la selección múltiple con Shift o Ctrl.
+        tablaBuscador.setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
         // Se definen anchos preferidos fijos.
+        tablaBuscador.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
         tablaBuscador.getColumnModel().getColumn(0).setPreferredWidth(60);
         tablaBuscador.getColumnModel().getColumn(1).setPreferredWidth(250);
         tablaBuscador.getColumnModel().getColumn(2).setPreferredWidth(80);
@@ -119,7 +119,8 @@ public class InterfazUsuario {
 
         // El JScrollPane detectará automáticamente que la tabla es ancha y mostrará la barra.
         JScrollPane scrollIzquierdo = new JScrollPane(tablaBuscador);
-        scrollIzquierdo.setBorder(BorderFactory.createTitledBorder("1. Productos Encontrados (Doble clic para agregar)"));
+        scrollIzquierdo.setBorder(BorderFactory.createTitledBorder("1. Productos Encontrados"));
+        scrollIzquierdo.setPreferredSize(new Dimension(650, 0)); // Ancho fijo preferido
 
         // Tabla Derecha: Carrito / Cotización
         String[] columnasCarrito = {"Código", "Descripción", "Precio"};
@@ -129,15 +130,18 @@ public class InterfazUsuario {
         };
         tablaCarrito = new JTable(modeloCarrito);
         tablaCarrito.setRowHeight(25);
+        tablaCarrito.setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
+
         tablaCarrito.getColumnModel().getColumn(0).setPreferredWidth(60);
         tablaCarrito.getColumnModel().getColumn(1).setPreferredWidth(200);
         tablaCarrito.getColumnModel().getColumn(2).setPreferredWidth(80);
 
         JScrollPane scrollDerecho = new JScrollPane(tablaCarrito);
-        scrollDerecho.setBorder(BorderFactory.createTitledBorder("2. Mi Cotización (Doble clic para quitar)"));
+        scrollDerecho.setBorder(BorderFactory.createTitledBorder("2. Mi Cotización"));
 
         // Panel contenedor para la tabla derecha y el TOTAL
         JPanel panelDerechoCompleto = new JPanel(new BorderLayout());
+        panelDerechoCompleto.setPreferredSize(new Dimension(500, 0)); // Ancho fijo preferido
         panelDerechoCompleto.add(scrollDerecho, BorderLayout.CENTER);
 
         lblTotalCotizacion = new JLabel("TOTAL: $ 0.00");
@@ -147,40 +151,64 @@ public class InterfazUsuario {
         lblTotalCotizacion.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
         panelDerechoCompleto.add(lblTotalCotizacion, BorderLayout.SOUTH);
 
-        // Divisor de pantalla para los paneles
-        JSplitPane splitPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, scrollIzquierdo, panelDerechoCompleto);
-        splitPane.setResizeWeight(0.6); // 60% para la búsqueda, 40% para el carrito
-        splitPane.setDividerSize(8);
+        // COLUMNA CENTRAL: Botones de Transferencia de productos en ambos sentidos
+        JPanel panelTransferencia = new JPanel(new GridBagLayout()); // Centra el contenido maravillosamente
+        JPanel panelBotonesTransf = new JPanel(new GridLayout(4, 1, 0, 15)); // 4 botones apilados
 
-        JPanel panelCentral = new JPanel(new BorderLayout());
+        JButton btnAgregarSeleccion = new JButton(" > ");
+        JButton btnAgregarTodos = new JButton(" >> ");
+        JButton btnQuitarSeleccion = new JButton(" < ");
+        JButton btnQuitarTodos = new JButton(" << ");
+
+        estilizarBotonTransferencia(btnAgregarSeleccion);
+        estilizarBotonTransferencia(btnAgregarTodos);
+        estilizarBotonTransferencia(btnQuitarSeleccion);
+        estilizarBotonTransferencia(btnQuitarTodos);
+
+        // se incorpora un tip textual para guiar al usuario
+        btnAgregarSeleccion.setToolTipText("Agregar producto(s) seleccionado(s)");
+        btnAgregarTodos.setToolTipText("Agregar TODOS los productos de la lista");
+        btnQuitarSeleccion.setToolTipText("Quitar producto(s) seleccionado(s) de la cotización");
+        btnQuitarTodos.setToolTipText("Vaciar toda la cotización");
+
+        panelBotonesTransf.add(btnAgregarSeleccion);
+        panelBotonesTransf.add(btnAgregarTodos);
+        panelBotonesTransf.add(btnQuitarSeleccion);
+        panelBotonesTransf.add(btnQuitarTodos);
+
+        panelTransferencia.add(panelBotonesTransf); // Lo ubica en el centro del GridBag
+
+        // Ensamble del Panel Central Completo
+        JPanel panelCentral = new JPanel(new BorderLayout(15, 0)); // 15px de separación entre columnas
         panelCentral.setBorder(BorderFactory.createEmptyBorder(10, 20, 10, 20));
-        panelCentral.add(splitPane, BorderLayout.CENTER);
+        panelCentral.add(scrollIzquierdo, BorderLayout.WEST);
+        panelCentral.add(panelTransferencia, BorderLayout.CENTER);
+        panelCentral.add(panelDerechoCompleto, BorderLayout.EAST);
+
         frame.add(panelCentral, BorderLayout.CENTER);
 
         // ==========================================
-        // 4. PANEL INFERIOR - Acciones Finales
+        // 3. PANEL INFERIOR - Acciones Finales
         // ==========================================
         JPanel panelBotonSur = new JPanel(new FlowLayout(FlowLayout.RIGHT, 15, 15));
 
-        JButton btnVaciarCarrito = new JButton("🗑️ Vaciar Cotización");
         JButton btnWhatsApp = new JButton("💬 Enviar por WhatsApp");
         JButton btnSalir = new JButton("❌ Salir");
 
-        estilizarBoton(btnVaciarCarrito, GRIS_SUAVE, Color.BLACK);
         estilizarBoton(btnWhatsApp, VERDE_WPP, Color.WHITE);
         estilizarBoton(btnSalir, ROJO_SUAVE, Color.WHITE);
 
-        panelBotonSur.add(btnVaciarCarrito);
         panelBotonSur.add(btnWhatsApp);
         panelBotonSur.add(btnSalir);
 
         frame.add(panelBotonSur, BorderLayout.SOUTH);
 
         // ==========================================
-        // EVENTOS Y LÓGICA
+        // EVENTOS Y LÓGICA DE TRANSFERENCIA
         // ==========================================
 
         cargarCategorias();
+
         // EVENTO 1: Al cambiar Familia - GENERAL
         comboGeneral.addActionListener(e -> {
             String categoria = (String) comboGeneral.getSelectedItem();
@@ -188,7 +216,7 @@ public class InterfazUsuario {
                 cargarElecciones(categoria);
                 comboEleccion.setEnabled(true);
                 btnVerLista.setEnabled(false);
-                modeloBuscador.setRowCount(0); // Limpia la tabla izquierda
+                modeloBuscador.setRowCount(0);
             } else {
                 comboEleccion.removeAllItems();
                 comboEleccion.setEnabled(false);
@@ -237,6 +265,62 @@ public class InterfazUsuario {
             }
         });
 
+        // ==============================================
+        // LÓGICA DE LOS BOTONES DE TRANSFERENCIA/FLECHAS
+        // ==============================================
+
+        // 1. [ > ] Mover Seleccionados al Carrito
+        btnAgregarSeleccion.addActionListener(e -> {
+            int[] filas = tablaBuscador.getSelectedRows();
+            for (int fila : filas) {
+                String codigo = tablaBuscador.getValueAt(fila, 0).toString();
+                String descripcion = tablaBuscador.getValueAt(fila, 1).toString();
+                double precio = (double) tablaBuscador.getValueAt(fila, 2);
+
+                modeloCarrito.addRow(new Object[]{codigo, descripcion, precio});
+                sumaTotal += precio;
+            }
+            actualizarLabelTotal();
+            tablaBuscador.clearSelection(); // Deselecciona para evitar doble click accidental
+        });
+
+        // 2. [ >> ] Mover TODOS al Carrito
+        btnAgregarTodos.addActionListener(e -> {
+            for (int fila = 0; fila < modeloBuscador.getRowCount(); fila++) {
+                String codigo = modeloBuscador.getValueAt(fila, 0).toString();
+                String descripcion = modeloBuscador.getValueAt(fila, 1).toString();
+                double precio = (double) modeloBuscador.getValueAt(fila, 2);
+
+                modeloCarrito.addRow(new Object[]{codigo, descripcion, precio});
+                sumaTotal += precio;
+            }
+            actualizarLabelTotal();
+        });
+
+        // 3. [ < ] Quitar Seleccionados del Carrito
+        btnQuitarSeleccion.addActionListener(e -> {
+            int[] filas = tablaCarrito.getSelectedRows();
+            // Para borrar varias filas de una tabla, siempre se debe hacer desde abajo hacia arriba.
+            for (int i = filas.length - 1; i >= 0; i--) {
+                int fila = filas[i];
+                double precioRestar = (double) tablaCarrito.getValueAt(fila, 2);
+                sumaTotal -= precioRestar;
+                modeloCarrito.removeRow(fila);
+            }
+            actualizarLabelTotal();
+        });
+
+        // 4. [ << ] Quitar TODOS - Reemplaza al viejo botón "Vaciar Cotización"
+        btnQuitarTodos.addActionListener(e -> {
+            modeloCarrito.setRowCount(0);
+            sumaTotal = 0.0;
+            actualizarLabelTotal();
+        });
+
+        // =================================================
+        // LÓGICA DEL DOBLE CLIC - Se mantiene como "Atajo"
+        // =================================================
+
         // EVENTO 6: Seleccion de Productos: Doble clic en Tabla Búsqueda -> Pasa al Carrito
         tablaBuscador.addMouseListener(new MouseAdapter() {
             @Override
@@ -272,14 +356,9 @@ public class InterfazUsuario {
             }
         });
 
-        // EVENTO 8: Botón Vaciar Carrito
-        btnVaciarCarrito.addActionListener(e -> {
-            modeloCarrito.setRowCount(0);
-            sumaTotal = 0.0;
-            actualizarLabelTotal();
-        });
+        // ----------------------------------------------------
 
-        // EVENTO 9: Botón Enviar por WhatsApp
+        // EVENTO 8: Botón Enviar por WhatsApp
         btnWhatsApp.addActionListener(e -> {
             if (modeloCarrito.getRowCount() == 0) {
                 JOptionPane.showMessageDialog(frame, "La cotización está vacía. Agregue productos primero.", "Advertencia", JOptionPane.WARNING_MESSAGE);
@@ -308,7 +387,7 @@ public class InterfazUsuario {
             }
         });
 
-        // EVENTO 10: Botón Salir
+        // EVENTO 9: Botón Salir
         btnSalir.addActionListener(e -> {
             frame.dispose();
             System.exit(0);
@@ -320,14 +399,22 @@ public class InterfazUsuario {
     // ==========================================
     // MÉTODOS AUXILIARES DE DISEÑO
     // ==========================================
-    // Método auxiliar de diseño
+
     private void estilizarBoton(JButton boton, Color colorFondo, Color colorTexto) {
         boton.setBackground(colorFondo);
         boton.setForeground(colorTexto);
         boton.setFont(new Font("Segoe UI Emoji", Font.BOLD, 14));
         boton.setCursor(new Cursor(Cursor.HAND_CURSOR));
-        // Esto respeta los bordes redondeados y efectos modernos de FlatLaf.
         boton.setMargin(new java.awt.Insets(10, 20, 10, 20));
+    }
+
+    // Un diseño compacto y llamativo para las flechas.
+    private void estilizarBotonTransferencia(JButton boton) {
+        boton.setBackground(GRIS_OSCURO);
+        boton.setForeground(Color.WHITE);
+        boton.setFont(new Font("Consolas", Font.BOLD, 18)); // Consolas hace que las flechas se vean mejor
+        boton.setCursor(new Cursor(Cursor.HAND_CURSOR));
+        boton.setMargin(new java.awt.Insets(10, 25, 10, 25));
     }
 
     public void mostrar() {
@@ -352,7 +439,6 @@ public class InterfazUsuario {
         }
     }
 
-    // Método que ahora llena la TABLA en lugar de un área de texto
     private void llenarTablaBuscador(List<Producto> productos) {
         modeloBuscador.setRowCount(0);
         if (productos.isEmpty()) {
@@ -361,7 +447,7 @@ public class InterfazUsuario {
         }
 
         for (Producto p : productos) {
-            String comp = p.tieneComposicion() ? p.getComposicion() : "N/A";
+            String comp = p.tieneComposicion() ? p.getComposicion() : "";
             modeloBuscador.addRow(new Object[]{
                     p.getCodigo(),
                     p.getDescripcionEspecifica(),

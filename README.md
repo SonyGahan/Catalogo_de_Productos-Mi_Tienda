@@ -1,4 +1,4 @@
-# Sistema de Consulta de Productos y Punto de Venta (POS) 🛒
+# Sistema de Consulta de Productos y Punto de Venta 🛒
 
 Un sistema robusto y eficiente desarrollado en **Java 17** con interfaz gráfica **(Swing)** para la gestión, filtrado y generación de cotizaciones a través de un catálogo de productos. El sistema migra datos estructurados desde archivos .csv hacia una base de datos relacional embebida **(SQLite)**. Destaca por su panel de cotización interactivo (carrito), que permite al usuario realizar búsquedas jerárquicas o libres, calcular totales en tiempo real e inyectar dinámicamente las composiciones de los productos mediante consultas **SQL (JOIN)**, para finalmente exportar los tickets directamente a WhatsApp.
 
@@ -7,13 +7,16 @@ Un sistema robusto y eficiente desarrollado en **Java 17** con interfaz gráfica
 * **⚙️ Arquitectura Backend y Persistencia Segura:** Integración con base de datos embebida (SQLite) que garantiza la retención segura de la información. Implementa Transacciones SQL (Commit/Rollback) para proteger el catálogo existente ante errores de lectura o archivos CSV corruptos, y utiliza procesamiento por lotes (Batching) para lograr la inserción de miles de registros en milisegundos.
 * **🛡️ Flujo de Trabajo y Seguridad:** Incorpora un Menú Principal ("Panel de Control") que separa lógicamente el rol de Administración (actualización de base de datos) del rol de Ventas (armado de pedidos), previniendo modificaciones accidentales durante la atención al cliente.
 * **🧠 Lógica de Negocio Avanzada:** El sistema gestiona y respeta la jerarquía relacional de los datos (Familia -> Grupo -> Productos específicos). Incorpora un motor de búsqueda dual (filtros en cascada y búsqueda libre por texto) perfectamente sincronizado.
-* **🎨 Experiencia de Usuario (UX) Profesional e Interactiva:** La vista de ventas evoluciona hacia un sistema POS dividiendo la pantalla mediante un `JSplitPane`. Implementa tablas interactivas (`JTable`) que permiten al usuario agregar productos al carrito o quitarlos con un simple **doble clic**, recalculando el presupuesto matemático en tiempo real.
+* **🎨 Experiencia de Usuario (UX) Profesional e Interactiva:** Interfaz modernizada con la librería **FlatLaf**, incorporando un *Toggle Switch* para alternar dinámicamente entre **Modo Claro y Oscuro**. La vista de ventas adopta el patrón de diseño **Transfer List** en una estructura amplia de 3 columnas. Soporta selección múltiple de registros en las tablas (`JTable`) y su traslado al carrito mediante flechas de transferencia (o doble clic rápido), recalculando presupuestos en tiempo real bajo un diseño limpio y equilibrado.
 * **📱 Integración Comercial:** Transformación del carrito de compras en tickets detallados listos para el cliente. Cuenta con conectividad directa a la API de WhatsApp (wa.me), lo que permite exportar y enviar la cotización completa de manera automatizada con un solo clic.
 
 ## 🛠️ Tecnologías Utilizadas
 
 * **Lenguaje:** Java 17
 * **Paradigma:** Programación Orientada a Objetos (POO)
+* **Base de Datos:** SQLite (Embebida)
+* **Interfaz Gráfica:** Java Swing UI
+* **Librerías UI:** FlatLaf (Look and Feel moderno)
 * **Diseño de Arquitectura:** UML (Casos de Uso, Clases, Actividades, Secuencia) modelado en Draw.io.
 
 ---
@@ -25,7 +28,8 @@ A continuación te mostramos cómo se ve la aplicación:
 ![Presentación del Sistema](/assets/Final.JPG)
 
 ---
-![Presentación del Sistema](/assets/FinalOscuro.JPG)
+
+![Presentación del Sistema - Modo Oscuro](/assets/FinalOscuro.JPG)
 
 ---
 
@@ -33,7 +37,7 @@ A continuación te mostramos cómo se ve la aplicación:
 
 ---
 
-![Vista Principal](/assets/imagen1oscuro.JPG)
+![Vista Principal - Modo Oscuro](/assets/imagen1oscuro.JPG)
 
 ---
 
